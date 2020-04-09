@@ -1,4 +1,6 @@
 import aiohttp
+from starlette.authentication import requires
+from starlette.requests import Request
 from .. import settings
 from ..movie.base_repository import BaseRepository
 from . import (
@@ -21,8 +23,13 @@ def convert_result_keys(received_dict):
 
 class MovieRepository(BaseRepository):
     @staticmethod
+    @requires("authenticated")
     async def search(
-        title: str, mtype: MovieType = None, year: str = None, page: int = 1
+        request: Request,
+        title: str,
+        mtype: MovieType = None,
+        year: str = None,
+        page: int = 1,
     ) -> MovieSearchDataclass:
         params = {
             "apikey": settings.OMDBAPI_KEY,
@@ -51,13 +58,24 @@ class MovieRepository(BaseRepository):
         return MovieSearchDataclass(movies=movies, errors=errors)
 
     @staticmethod
+    @requires("authenticated")
     async def fetch(
+        request: Request,
         imdbid: int = None,
         title: str = None,
         mtype: MovieType = None,
         year: str = None,
         plot: PlotType = None,
     ) -> MovieFetchDataclass:
+        if not imdbid and not title:
+            return MovieFetchDataclass(
+                errors=[
+                    {
+                        "field": "imbdid",
+                        "message": "One of (imbdid, title) arguments is required",
+                    },
+                ],
+            )
         params = {
             "apikey": settings.OMDBAPI_KEY,
         }
@@ -76,8 +94,6 @@ class MovieRepository(BaseRepository):
             response = await session.get(url=settings.OMDBAPI_URL, params=params)
             response.raise_for_status()
             content = await response.json()
-            print(content)
-            print(content)
 
             if content["Response"] == "False":
                 movie = None
