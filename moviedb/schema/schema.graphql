@@ -1,0 +1,72 @@
+scalar JSONString
+
+type Query {
+    movieSearch(title: String!, mtype: MovieTypeEnum, year: String, page: Int): [Movie!]
+    movieFetch(id: ID!): Movie
+}
+
+type Mutation {
+    movieSave(imdbid: ID, input: MovieInput): Movie
+}
+
+enum MovieTypeEnum {
+  MOVIE
+  SERIES
+  EPISODE
+}
+
+input MovieInput{
+    id: ID
+    title: String!
+    year: String!
+    rated: String
+    released: String
+    runtime: String
+    genre: String
+    director: String
+    writer: String
+    actors: String
+    plot: String
+    language: String
+    country: String
+    awards: String
+    poster: String
+    ratings: String
+    metascore: String
+    imdbrating: String
+    imdbvotes: String
+    imdbid: String
+    type: String
+    dvd: String
+    boxoffice: String
+    production: String
+    website: String
+}
+
+type Movie{
+    id: ID
+    title: String!
+    year: String!
+    rated: String
+    released: String
+    runtime: String
+    genre: String
+    director: String
+    writer: String
+    actors: String
+    plot: String
+    language: String
+    country: String
+    awards: String
+    poster: String
+    ratings: String
+    metascore: String
+    imdbrating: String
+    imdbvotes: String
+    imdbid: String
+    type: String
+    dvd: String
+    boxoffice: String
+    production: String
+    website: String
+}

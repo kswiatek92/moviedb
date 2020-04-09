@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  db:
+    image: library/postgres:11-alpine
+    restart: unless-stopped
+    networks:
+      - moviedb
+    environment:
+      - POSTGRES_USER=moviedb
+      - POSTGRES_PASSWORD=moviedb
+      - POSTGRES_DB=moviedb
+
+    ports:
+      - '5432:5432'
+    volumes:
+      - moviedb-db:/var/lib/postgresql
+
+  moviedb:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    networks:
+      - moviedb
+    env_file:
+      - common.env
+    environment:
+      - SECRET_KEY
+    depends_on:
+      - db
+    ports:
+      - '8000:8000'
+
+volumes:
+  moviedb-db:
+    driver: local
+
+networks:
+  moviedb:
+    driver: bridge
