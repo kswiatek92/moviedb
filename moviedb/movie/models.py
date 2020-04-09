@@ -31,3 +31,11 @@ class Movie(db.Model):
     boxoffice = db.Column(db.String(50), nullable=True)
     production = db.Column(db.String(50), nullable=True)
     website = db.Column(db.String(200), nullable=True)
+
+
+class User(db.Model):
+    __tablename__ = "user"
+
+    id = db.Column(db.Integer(), primary_key=True)
+    email = db.Column(db.String(128), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
