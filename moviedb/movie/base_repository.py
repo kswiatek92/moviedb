@@ -3,11 +3,11 @@ class BaseRepository:
         abstract = True
 
     @staticmethod
-    def search():
+    def search(title, mtype, year, page):
         return NotImplemented
 
     @staticmethod
-    def fetch():
+    def fetch(imdbid, title, mtype, year, plot):
         return NotImplemented
 
     @staticmethod

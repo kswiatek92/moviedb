@@ -1,12 +1,17 @@
 from enum import Enum
-from dataclasses import dataclass
-from typing import Optional
+from dataclasses import dataclass, field
+from typing import Optional, List
 
 
 class MovieType(Enum):
-    MOVIE="movie"
-    SERIES="series"
-    EPISODE="episode"
+    MOVIE = "movie"
+    SERIES = "series"
+    EPISODE = "episode"
+
+
+class PlotType(Enum):
+    SHORT = "short"
+    FULL = "full"
 
 
 @dataclass
@@ -36,3 +41,16 @@ class MovieDataclass:
     boxoffice: Optional[str] = None
     production: Optional[str] = None
     website: Optional[str] = None
+    # errors: List[dict] = field(default_factory=list)
+
+
+@dataclass
+class MovieFetchDataclass:
+    movie: Optional[MovieDataclass] = None
+    errors: List[dict] = field(default_factory=list)
+
+
+@dataclass
+class MovieSearchDataclass:
+    movies: List[MovieDataclass] = field(default_factory=list)
+    errors: List[dict] = field(default_factory=list)

@@ -1,8 +1,8 @@
 scalar JSONString
 
 type Query {
-    movieSearch(title: String!, mtype: MovieTypeEnum, year: String, page: Int): [Movie!]
-    movieFetch(id: ID!): Movie
+    movieSearch(title: String!, mtype: MovieTypeEnum, year: String, page: Int): MovieSearch
+    movieFetch(imdbid: ID, title: String, mtype: MovieTypeEnum, year: String, plot: PlotTypeEnum): MovieFetch
 }
 
 type Mutation {
@@ -13,6 +13,11 @@ enum MovieTypeEnum {
   MOVIE
   SERIES
   EPISODE
+}
+
+enum PlotTypeEnum {
+  SHORT
+  FULL
 }
 
 input MovieInput{
@@ -69,4 +74,19 @@ type Movie{
     boxoffice: String
     production: String
     website: String
+}
+
+type MovieFetch{
+    movie: Movie
+    errors: [MovieError]
+}
+
+type MovieSearch{
+    movies: [Movie!]
+    errors: [MovieError]
+}
+
+type MovieError {
+    message: String,
+    field: String
 }
