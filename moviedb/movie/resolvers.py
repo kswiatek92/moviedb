@@ -1,9 +1,10 @@
-from ariadne import ObjectType
+from ariadne import ObjectType, MutationType
 
 from starlette.exceptions import HTTPException
 from .repository import MovieRepository
 
 query = ObjectType("Query")
+mutation = MutationType()
 
 
 @query.field("movieSearch")
@@ -25,6 +26,18 @@ async def resolve_movie_fetch(
     request = info.context["request"]
     try:
         return await MovieRepository.fetch(request, imdbid, title, mtype, year, plot)
+    except HTTPException:
+        return {
+            "movie": None,
+            "errors": [{"field": "unknown", "message": "Login required",},],
+        }
+
+
+@mutation.field("movieSave")
+def resolve_movie_save(_, info, imdbid, input):
+    request = info.context["request"]
+    try:
+        return await MovieRepository.save(request, imdbid, input)
     except HTTPException:
         return {
             "movie": None,

@@ -1,4 +1,5 @@
 import aiohttp
+import json
 from starlette.authentication import requires
 from starlette.requests import Request
 from .. import settings
@@ -10,6 +11,7 @@ from . import (
     MovieFetchDataclass,
     MovieSearchDataclass,
 )
+from .models import Movie
 
 ERRORS_MAPPER = {
     "Something went wrong.": {"field": "unknown", "message": "Something went wrong."},
@@ -104,3 +106,40 @@ class MovieRepository(BaseRepository):
                 errors = []
 
         return MovieFetchDataclass(movie=movie, errors=errors)
+
+    @staticmethod
+    @requires("authenticated")
+    async def save(
+        request: Request, imdbid: int = None, input: dict = None,
+    ) -> MovieFetchDataclass:
+        if imdbid and not input:
+            movie = MovieRepository.fetch(request, imdbid)
+        elif input:
+            movie = MovieDataclass(**input)
+
+        await Movie.create(
+            title=movie.title,
+            year=movie.year,
+            rated=movie.rated,
+            released=movie.released,
+            runtime=movie.runtime,
+            genre=movie.genre,
+            director=movie.director,
+            writer=movie.writer,
+            actors=movie.actors,
+            plot=movie.plot,
+            language=movie.language,
+            country=movie.country,
+            awards=movie.awards,
+            poster=movie.poster,
+            ratings=json.loads(movie.ratings),
+            metascore=movie.metascore,
+            imdbrating=movie.imdbrating,
+            imdbvotes=movie.imdbvotes,
+            imdbid=imdbid,
+            type=movie.type,
+            dvd=movie.dvd,
+            boxoffice=movie.boxoffice,
+            production=movie.production,
+            website=movie.website,
+        )
