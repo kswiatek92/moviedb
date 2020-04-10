@@ -32,6 +32,21 @@ services:
     ports:
       - '8000:8000'
 
+  movie_front:
+    build:
+      context: ./movie_front
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    networks:
+      - moviedb
+    tty: true
+    volumes:
+      - ./movie_front/:/app:cached
+      - /app/node_modules/
+    command: npm start -- --host 0.0.0.0
+
 volumes:
   moviedb-db:
     driver: local
