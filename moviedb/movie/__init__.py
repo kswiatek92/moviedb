@@ -1,6 +1,6 @@
-from enum import Enum
 from dataclasses import dataclass, field
-from typing import Optional, List
+from enum import Enum
+from typing import List, Optional
 
 
 class MovieType(Enum):

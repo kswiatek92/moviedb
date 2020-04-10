@@ -1,15 +1,17 @@
-import aiohttp
 import json
+
+import aiohttp
 from starlette.authentication import requires
 from starlette.requests import Request
+
 from .. import settings
 from ..movie.base_repository import BaseRepository
 from . import (
     MovieDataclass,
-    MovieType,
-    PlotType,
     MovieFetchDataclass,
     MovieSearchDataclass,
+    MovieType,
+    PlotType,
 )
 from .models import Movie
 

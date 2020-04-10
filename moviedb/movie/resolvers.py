@@ -1,6 +1,6 @@
-from ariadne import ObjectType, MutationType
-
+from ariadne import MutationType, ObjectType
 from starlette.exceptions import HTTPException
+
 from .repository import MovieRepository
 
 query = ObjectType("Query")

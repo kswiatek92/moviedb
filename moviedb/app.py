@@ -2,9 +2,9 @@ from ariadne.asgi import GraphQL
 from starlette.applications import Starlette
 
 from . import settings
+from .middleware import middleware
 from .movie.database import db
 from .schema import schema
-from .middleware import middleware
 
 routes = []
 
